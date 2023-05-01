@@ -1,13 +1,6 @@
 import { useState } from 'react'
 import './App.css'
 
-// import {initializeApp} from 'firebase/app'
-// import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from 'firebase/auth'
-// import {getFirestore, collection } from 'firebase/firestore'
-
-// import 'firebase/firestore'
-// import 'firebase/auth'
-
 import firebase from 'firebase/compat/app'; 
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';      
@@ -15,7 +8,6 @@ import 'firebase/compat/auth';
 import { useAuthState} from 'react-firebase-hooks/auth'
 import {useCollectionData} from 'react-firebase-hooks/firestore'
 import { useRef } from 'react';
-import { useEffect } from 'react';
 
 firebase.initializeApp({
   apiKey: "AIzaSyCvQGXdDE5_gckxgccIKkEI_WHyphYS1hM",
@@ -38,7 +30,8 @@ function App() {
   return (
     <div className="App">
       <header>
-        <img src={'../chat.png'}  />
+        <img src={'../src/assets/chat.png'}  />
+        <h1>talker</h1>
         { user ? <SignOut /> : null}
       </header>
 
@@ -49,6 +42,7 @@ function App() {
   )
 }
 
+
 function SignIn() {
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider()
@@ -56,78 +50,69 @@ function SignIn() {
   }
 
   return (
-    <button onClick={signInWithGoogle}>Sign in with Google</button>
+    <button className='sign-in' onClick={signInWithGoogle}>Sign in with Google</button>
   )
 }
 
+
 function SignOut() {
   return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>Sign Out</button>
+    <button className='sign-out' onClick={() => auth.signOut()}>Sign Out</button>
   )
 }
+
 
 function ChatRoom() {
   const dummy = useRef()
 
   const messagesRef = firestore.collection('messages')
-  const query = messagesRef.orderBy('createdAt').limit(25)
-  // const query = messagesRef.orderby('createdAt').limit(25)
+  const query = messagesRef.orderBy('createdAt').limit(1000)
   
-  const [messages] = useCollectionData(query, {idField: 'id'})
+  const [messages, id] = useCollectionData(query, {idField : 'id'})
 
   const [formValue, setFormValue] = useState('')
 
 
-  useEffect(() => {
-    const form = document.getElementsByTagName("form")[0]
-    const btn = document.getElementsByTagName("textarea")[0]
-    // const btn = document.getElementsByClassName("send")
-    
-    form.addEventListener("keyup", (e) => {
-      const keyCode = e.key
 
-      if (keyCode === "Enter" && !e.shiftKey ) {
-        console.log(form)
-        e.preventDefault()
-        console.log()
-        
-        setTimeout(btn.click(), 1000)
-        
-        // form.addEventListener("submit", sendMessage)
-          // form.onsubmit = function() {sendMessage(e)}
-          // // console.log(1)
-          // sendMessage(e)
-      }
-    })
-  })
+  const checkKey = (e) => {
+    if (e.key === "Enter" && e.shiftKey) {
+      return null
+    }else if (e.key === "Enter") {
+      sendMessage(e)
+    }
+  }
   
 
   const sendMessage = async(e) => {
     console.log(e)
     e.preventDefault()
 
-    const {uid, photoURL} = auth.currentUser;
-    await messagesRef.add({
-      text: formValue,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid,
-      photoURL
-    })
-    
-    setFormValue('')
+    if (!formValue.replace(/\s/g, '').length ){
+      return null
+    }else {
+      const {uid, photoURL} = auth.currentUser;
+      await messagesRef.add({
+        text: formValue,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        uid,
+        photoURL
+      })
+      
+      setFormValue('')
 
-    dummy.current.scrollIntoView({ behavior: 'smooth' })
+      dummy.current.scrollIntoView({ behavior: 'smooth' })
+    }
   }
-
   return(
     <>
+    {/* <div></div> */}
     <div>
       {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
     </div>
 
     <form onSubmit={sendMessage}>
-      <textarea maxLength="400" value={formValue} onChange={(e) => setFormValue(e.target.value)} />
-      <button className='send' type="submit">SEND</button>
+      <textarea maxLength="400" value={formValue} onChange={(e) => setFormValue(e.target.value)} onKeyDown={e => checkKey(e)} />
+      <button className='send-button'  type="submit">SEND</button>
     </form>
 
     <div ref={dummy}></div>
@@ -143,7 +128,7 @@ function ChatMessage(props) {
   // return <p>{text} {messageClass}</p>
   return (
     <div className={`message ${messageClass}`}>
-        <img className='pfp' src={photoURL} alt="" />
+        <img className='pfp' src={photoURL} alt="" /> 
       <p>{text}</p>
     </div>
   )
