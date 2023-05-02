@@ -30,7 +30,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <img src={'../src/assets/chat.png'}  />
+        <img src={'../chat.png'}  />
         <h1>talker</h1>
         { user ? <SignOut /> : null}
       </header>
