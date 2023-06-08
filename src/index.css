@@ -17,18 +17,19 @@ h1 {
 
 .App {
   text-align: center;
-  max-width: 728px;
+  max-width: 44rem;
   margin: 0rem auto;
 
 }
 
 .App header {
   background-color: #171616;
-  height: 10vh;
+  height: 4rem;
   color: white; 
   position: fixed;
-  width: 100%;
-  max-width: 728px;
+  width: 90%;
+  max-width: 44rem;
+  min-width: 25rem;
   top: 0;
   display: flex;
   align-items: center;  
@@ -50,7 +51,8 @@ h1 {
 .App section {
   background-color: rgb(40, 37, 53);
   display: flex;
-  min-height: 85vh;
+  max-width: 44rem;
+  min-height: 50rem;
   flex-direction: column;
   justify-content: start;
   overflow: initial;
@@ -75,14 +77,16 @@ form {
   position: fixed;
   bottom: 0;
   background-color: rgb(24, 23, 23);
-  width: 100%;
-  max-width: 728px;
+  width: 90%;
+  max-width: 44rem;
+  min-width: 25rem;
   display: flex;
   font-size: 1.5rem;
 }
 
 form button {
-  width: 20%;
+  width: 6rem;
+  height: 3rem;
   background-color: rgb(56, 56, 143);
 }
 
