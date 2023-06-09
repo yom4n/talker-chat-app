@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 
 import firebase from 'firebase/compat/app'; 
 import 'firebase/compat/firestore';
