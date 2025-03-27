@@ -67,7 +67,7 @@ function ChatRoom() {
   const messagesRef = firestore.collection('messages')
   const query = messagesRef.orderBy('createdAt').limit(1000)
   
-  const [messages, id] = useCollectionData(query, {idField : 'id'})
+  const [messages] = useCollectionData(query, {idField : 'id'})
 
   const [formValue, setFormValue] = useState('')
 
@@ -106,7 +106,7 @@ function ChatRoom() {
     <>
     {/* <div></div> */}
     <div>
-      {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+      {messages && messages.map(msg => <ChatMessage key={msg.createdAt} message={msg} />)}
     </div>
 
     <form onSubmit={sendMessage}>
@@ -119,14 +119,14 @@ function ChatRoom() {
   )
 }
 
-function ChatMessage(props) {
+function ChatMessage(props, key) {
   const {text, uid, photoURL} = props.message;
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received'
 
   // return <p>{text} {messageClass}</p>
   return (
-    <div className={`message ${messageClass}`}>
+    <div className={`message ${messageClass}`} key={key}>
         <img className='pfp' src={photoURL} alt="" /> 
       <p>{text}</p>
     </div>
