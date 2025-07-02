@@ -7,6 +7,7 @@ import 'firebase/compat/auth';
 import { useAuthState} from 'react-firebase-hooks/auth'
 import {useCollectionData} from 'react-firebase-hooks/firestore'
 import { useRef } from 'react';
+import { useEffect } from 'react';
 
 firebase.initializeApp({
   apiKey: "AIzaSyCvQGXdDE5_gckxgccIKkEI_WHyphYS1hM",
@@ -28,15 +29,16 @@ function App() {
   
   return (
     <div className="App">
-      <header>
-        <img src={'../chat.png'}  />
-        <h1>talker</h1>
-        { user ? <SignOut /> : null}
-      </header>
-
-      <section>
-        {user ? <ChatRoom /> : <SignIn />}
-      </section>
+      <div className="AppChild">
+        <header>
+          <img src={'../chat.png'}  />
+          <h1>talker</h1>
+          { user ? <SignOut /> : null}
+        </header>
+        <section>
+          {user ? <ChatRoom /> : <SignIn />}
+        </section>
+      </div>
     </div>
   )
 }
@@ -71,7 +73,9 @@ function ChatRoom() {
 
   const [formValue, setFormValue] = useState('')
 
-
+  useEffect(()=>{
+    dummy.current.scrollIntoView({ behavior: 'smooth' })
+  })
 
   const checkKey = (e) => {
     if (e.key === "Enter" && e.shiftKey) {
@@ -105,7 +109,7 @@ function ChatRoom() {
   return(
     <>
     {/* <div></div> */}
-    <div>
+    <div className='messages-container'>
       {messages && messages.map(msg => <ChatMessage key={msg.createdAt} message={msg} />)}
     </div>
 

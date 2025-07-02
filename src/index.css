@@ -18,15 +18,19 @@ h1 {
 }
 
 .App {
+}
+
+.AppChild {
   text-align: center;
   max-width: 44rem;
   min-width: 15rem;
 
   margin: 0rem auto;
+  
 
 }
 
-.App header {
+.AppChild header {
   background-color: #171616;
   height: 4rem;
   color: white; 
@@ -44,19 +48,19 @@ h1 {
 }
 
 
-.App header img {
+.AppChild header img {
   width: 2.5rem;
   filter: invert(60%) ;
 
 }
 
 
-.App section {
+.AppChild section {
   background-color: rgb(40, 37, 53);
   display: flex;
   max-width: 44rem;
   min-width: 2rem;
-  min-height: 38rem;
+  min-height: 100vh;
   flex-direction: column;
   justify-content: start;
   overflow: initial;
@@ -165,6 +169,7 @@ p {
   word-wrap:break-word;
 
 }
+
 
 .message {
   display: flex;
